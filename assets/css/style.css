@@ -1,0 +1,738 @@
+/* =========================================================================
+   POS STORE v1.0 - Application Stylesheet
+   -------------------------------------------------------------------------
+   Design language: "the register drawer" - deep ledger-navy + a warm
+   copper accent (the color of a highlighted till key), set in a
+   technical type system (Space Grotesk / Inter / JetBrains Mono) that
+   nods to product codes, barcodes, and receipt tape.
+   ========================================================================= */
+
+:root {
+  /* Color tokens */
+  --pos-bg: #F7F5F0;
+  --pos-surface: #FFFFFF;
+  --pos-ink: #16233F;
+  --pos-ink-2: #0D1730;
+  --pos-fill-dark: #16233F; /* Brand-dark chip/button fill - intentionally constant across themes, unlike --pos-ink (which flips to a light color for readable text in dark mode). */
+  --pos-accent: #E07A2C;
+  --pos-accent-2: #F2A65A;
+  --pos-success: #2F9E64;
+  --pos-danger: #D64545;
+  --pos-warning: #D9A441;
+  --pos-text: #1F2430;
+  --pos-muted: #6B7280;
+  --pos-border: #E7E2D6;
+
+  /* Type */
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  background: var(--pos-bg);
+  color: var(--pos-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; text-decoration: none; }
+
+.pos-brand {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.25rem;
+  letter-spacing: 0.01em;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+}
+.pos-brand-mark { color: var(--pos-accent); }
+.pos-brand-rest { color: var(--pos-ink); }
+.pos-brand-lg { font-size: 1.9rem; }
+
+/* =========================================================================
+   Login screen
+   ========================================================================= */
+
+.pos-login-body {
+  min-height: 100vh;
+  margin: 0;
+}
+
+.pos-login-wrap {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+}
+
+.pos-login-aside {
+  background: radial-gradient(circle at 20% 15%, #1C2C4E 0%, var(--pos-ink-2) 60%);
+  color: #EDEFF4;
+  display: flex;
+  align-items: center;
+  padding: 4rem 3.5rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.pos-login-aside::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(115deg, rgba(224,122,44,0.06) 0 2px, transparent 2px 42px);
+  pointer-events: none;
+}
+
+.pos-login-aside-inner { position: relative; z-index: 1; max-width: 460px; }
+
+.pos-login-aside .pos-brand-rest { color: #F3F1EA; }
+
+.pos-tagline {
+  font-size: 1.05rem;
+  color: #C6CBDA;
+  margin: 1rem 0 2.25rem;
+  line-height: 1.55;
+}
+
+/* Receipt: fixed columns keep quantities and prices vertically aligned. */
+.pos-receipt {
+  background: #FBFAF6;
+  color: #1F2430;
+  border-radius: var(--radius-sm);
+  padding: 1.25rem 1.4rem 1.1rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  box-shadow: 0 24px 60px -20px rgba(0,0,0,0.55);
+  transform: none;
+}
+
+.pos-receipt-line {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px 72px;
+  column-gap: 0.35rem;
+  align-items: start;
+  padding: 0.2rem 0;
+  color: #3A3F4B;
+}
+.pos-receipt-line span:first-child { min-width: 0; overflow-wrap: anywhere; }
+.pos-receipt-line span:last-child { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.pos-receipt-line span:nth-child(2) { text-align: center; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.pos-receipt-column-head {
+  color: var(--pos-ink);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-bottom: 1px dashed #D7D2C4;
+  padding: 0.45rem 0 0.3rem;
+}
+
+.pos-receipt-head {
+  color: #8A8F9C;
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  border-bottom: 1px dashed #D7D2C4;
+  padding-bottom: 0.4rem;
+  margin-bottom: 0.2rem;
+}
+
+.pos-receipt-divider {
+  border-top: 1px dashed #D7D2C4;
+  margin: 0.5rem 0;
+}
+
+.pos-receipt-total {
+  font-weight: 600;
+  color: var(--pos-ink);
+  font-size: 0.88rem;
+}
+
+.pos-receipt-barcode {
+  display: block;
+  height: 48px;
+  margin: 0.9rem auto 0;
+  width: 100%;
+  background: #fff;
+}
+.pos-code39-svg { display: block; width: 100%; height: 48px; }
+.pos-code39-svg rect { fill: #000; }
+.pos-receipt-header { line-height: 1.4; }
+.pos-receipt-store-name { font-size: .98rem; font-weight: 700; color: var(--pos-ink); }
+.pos-receipt-store-address, .pos-receipt-store-contact, .pos-receipt-meta { font-size: .74rem; color: #3A3F4B; }
+.pos-receipt-invoice { margin-top: .4rem; font-weight: 700; font-size: .8rem; }
+.pos-receipt-customer { margin-top: .15rem; font-size: .78rem; font-weight: 600; }
+/* Decorative barcode shown on the login illustration. */
+.pos-login-aside .pos-receipt-barcode { display: flex; align-items: flex-end; justify-content: flex-start; gap: 2px; width: auto; height: 30px; background: transparent; }
+.pos-login-aside .pos-receipt-barcode span { display: block; width: 3px; background: #2A2E38; }
+.pos-login-aside .pos-receipt-barcode span:nth-child(3n) { height: 100%; }
+.pos-login-aside .pos-receipt-barcode span:nth-child(3n+1) { height: 70%; }
+.pos-login-aside .pos-receipt-barcode span:nth-child(3n+2) { height: 85%; }
+
+.pos-receipt-code {
+  text-align: center;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: #6B7280;
+  margin-top: 0.4rem;
+}
+
+/* -------------------------------------------------------------------
+   Receipt templates (Classic / Modern) and printer widths (58mm / 80mm)
+   ------------------------------------------------------------------- */
+/* Classic (default look, defined above) stays plain/monospace. */
+.pos-receipt-tpl-modern {
+  font-family: var(--font-body);
+  border: 1px solid var(--pos-border);
+}
+.pos-receipt-tpl-modern .pos-receipt-store-name { font-family: var(--font-display); font-size: 1.1rem; }
+.pos-receipt-tpl-modern .pos-receipt-head { border-bottom-style: solid; border-color: var(--pos-border); }
+.pos-receipt-tpl-modern .pos-receipt-column-head { background: var(--pos-fill-dark); color: #fff; border-radius: 6px 6px 0 0; padding: 0.5rem 0.6rem; margin: 0 -0.2rem; }
+.pos-receipt-tpl-modern .pos-receipt-divider { border-top-style: solid; }
+.pos-receipt-tpl-modern .pos-receipt-total { background: rgba(224,122,44,0.10); color: var(--pos-accent); font-size: 1rem; padding: 0.35rem 0.5rem; border-radius: 8px; margin: 0.2rem -0.5rem; }
+.pos-receipt-tpl-modern .pos-receipt-total span:first-child { font-weight: 700; }
+
+/* Printer width sizing - approximates real 58mm/80mm thermal paper (~203dpi)
+   for both the on-screen preview and the printed page. */
+.pos-receipt-w58 { max-width: 240px; margin: 0 auto; font-size: 0.72rem; padding: 1rem 0.9rem 0.9rem; }
+.pos-receipt-w58 .pos-receipt-line { grid-template-columns: minmax(0, 1fr) 34px 58px; }
+.pos-receipt-w80 { max-width: 320px; margin: 0 auto; }
+
+.pos-feature-list {
+  list-style: none;
+  padding: 0;
+  margin: 2.25rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  font-size: 0.85rem;
+  color: #C6CBDA;
+}
+.pos-feature-list i { color: var(--pos-accent-2); margin-right: 0.5rem; }
+
+.pos-login-main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+  background: var(--pos-bg);
+}
+
+.pos-login-card { width: 100%; max-width: 400px; }
+.pos-reset-page { min-height: 100vh; display: grid; place-items: center; padding: 1.5rem; background: radial-gradient(circle at top right, rgba(242,166,90,.22), transparent 32%), #f4f6fa; }
+.pos-reset-card { width: 100%; max-width: 440px; padding: 2.25rem; background: var(--pos-surface); border: 1px solid rgba(22,35,63,.10); border-radius: 20px; box-shadow: 0 20px 50px rgba(22,35,63,.14); }
+.pos-reset-card .pos-brand { display:flex; align-items:center; gap:6px; font-size:1.15rem; }.pos-reset-card .pos-brand-mark { background:var(--pos-fill-dark); color:#fff; padding:6px 9px; border-radius:8px; }.pos-reset-card .pos-brand-rest { color:var(--pos-ink); font-weight:800; letter-spacing:.08em; }.pos-reset-card .form-control { min-height:48px; border-radius:10px; }.pos-reset-card .pos-btn-primary { min-height:48px; border-radius:10px; font-weight:700; }
+
+.pos-login-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.6rem;
+  margin-bottom: 0.25rem;
+  color: var(--pos-ink);
+}
+
+.pos-login-subtitle {
+  color: var(--pos-muted);
+  margin-bottom: 1.75rem;
+  font-size: 0.92rem;
+}
+
+.pos-input-group .input-group-text {
+  background: var(--pos-surface);
+  border-right: none;
+  color: var(--pos-muted);
+}
+.pos-input-group .form-control {
+  border-left: none;
+  padding-top: 0.6rem;
+  padding-bottom: 0.6rem;
+}
+.pos-input-group .form-control:focus {
+  box-shadow: none;
+  border-color: var(--pos-accent);
+}
+.pos-input-group:focus-within .input-group-text {
+  border-color: var(--pos-accent);
+}
+.pos-input-group .form-control,
+.pos-input-group .input-group-text {
+  border-color: var(--pos-border);
+}
+
+.pos-toggle-pass {
+  border: 1px solid var(--pos-border);
+  border-left: none;
+  background: var(--pos-surface);
+  color: var(--pos-muted);
+}
+
+.pos-link { color: var(--pos-accent); font-weight: 500; }
+.pos-link:hover { color: var(--pos-ink); }
+
+.pos-btn-primary {
+  background: var(--pos-fill-dark);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radius-sm);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+.pos-btn-primary:hover { background: #0F1A30; color: #fff; }
+.pos-btn-primary:active { transform: scale(0.99); }
+.pos-btn-primary:disabled { opacity: 0.7; }
+
+.pos-login-footnote {
+  text-align: center;
+  color: var(--pos-muted);
+  font-size: 0.78rem;
+  margin-top: 2rem;
+}
+
+@media (max-width: 991.98px) {
+  .pos-login-wrap { grid-template-columns: 1fr; }
+  .pos-login-aside { display: none; }
+}
+
+/* =========================================================================
+   Authenticated app shell (navbar / sidebar / dashboard)
+   ========================================================================= */
+
+.pos-navbar {
+  background: var(--pos-surface);
+  border-bottom: 1px solid var(--pos-border);
+  height: 64px;
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+}
+
+.pos-sidebar-toggle { border: none; font-size: 1.3rem; color: var(--pos-ink); }
+
+.pos-icon-btn {
+  border: none;
+  background: transparent;
+  color: var(--pos-muted);
+  font-size: 1.1rem;
+  width: 38px; height: 38px;
+  border-radius: 50%;
+}
+.pos-icon-btn:hover { background: var(--pos-bg); }
+
+.pos-notif-dot {
+  position: absolute;
+  top: 8px; right: 8px;
+  width: 8px; height: 8px;
+  background: var(--pos-accent);
+  border-radius: 50%;
+  border: 2px solid var(--pos-surface);
+}
+
+.pos-user-btn {
+  border: 1px solid var(--pos-border);
+  background: var(--pos-surface);
+  border-radius: 999px;
+  padding: 0.3rem 0.75rem 0.3rem 0.3rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.pos-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--pos-fill-dark);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pos-shell {
+  display: flex;
+  min-height: calc(100vh - 64px);
+}
+
+.pos-sidebar {
+  width: 250px;
+  flex-shrink: 0;
+  background: var(--pos-surface);
+  border-right: 1px solid var(--pos-border);
+  padding: 1rem 0.75rem;
+}
+
+.pos-sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-sm);
+  color: var(--pos-text);
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.15rem;
+}
+.pos-sidebar-link i { font-size: 1.05rem; color: var(--pos-muted); width: 20px; text-align: center; }
+.pos-sidebar-link:hover { background: var(--pos-bg); }
+.pos-sidebar-link.active { background: var(--pos-fill-dark); color: #fff; }
+.pos-sidebar-link.active i { color: var(--pos-accent-2); }
+
+.pos-badge-soft {
+  background: var(--pos-bg);
+  color: var(--pos-muted);
+  font-weight: 500;
+  font-size: 0.65rem;
+  border: 1px solid var(--pos-border);
+}
+
+.pos-main { flex: 1; min-width: 0; }
+
+.pos-card { border-radius: var(--radius-md); }
+
+.pos-footer { border-top: 1px solid var(--pos-border); background: var(--pos-surface); }
+
+/* =========================================================================
+   CRUD module tables (Categories, Products, Suppliers, Customers)
+   ========================================================================= */
+
+.pos-table thead th {
+  font-family: var(--font-display);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pos-muted);
+  border-bottom: 1px solid var(--pos-border);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.pos-table td { border-color: var(--pos-border); font-size: 0.9rem; vertical-align: middle; }
+.pos-table tbody tr:hover { background: var(--pos-bg); }
+.pos-cart-qty-column { width: 175px; min-width: 175px; }
+.pos-cart-qty-cell { min-width: 175px; }
+.pos-qty-control { flex-wrap: nowrap; min-width: 165px; }
+.pos-qty-control .btn { width: 38px; min-width: 38px; display: inline-flex; align-items: center; justify-content: center; }
+.pos-qty-control .cart-qty-input { min-width: 74px; flex: 1 1 74px; font-weight: 600; }
+/* Keep action buttons reachable when a form is inside a scrollable modal. */
+.modal-dialog-scrollable .modal-content > form { display: flex; flex-direction: column; max-height: calc(100vh - 3.5rem); overflow: hidden; }
+.modal-dialog-scrollable .modal-content > form .modal-body { overflow-y: auto; }
+.modal-dialog-scrollable .modal-content > form .modal-footer { flex-shrink: 0; }
+
+.pos-sortable { cursor: pointer; user-select: none; }
+.pos-sortable i { font-size: 0.7rem; opacity: 0.5; margin-left: 2px; }
+.pos-sortable:hover i { opacity: 1; }
+
+.pos-badge-success { background: rgba(47,158,100,0.12); color: var(--pos-success); font-weight: 500; }
+.pos-badge-muted   { background: rgba(107,114,128,0.12); color: var(--pos-muted); font-weight: 500; }
+.pos-badge-warning { background: rgba(217,164,65,0.15); color: #8A6416; font-weight: 500; }
+.pos-badge-danger  { background: rgba(214,69,69,0.12); color: var(--pos-danger); font-weight: 500; }
+
+.pos-icon-btn-table {
+  border: none;
+  background: transparent;
+  color: var(--pos-muted);
+  padding: 0.25rem 0.45rem;
+}
+.pos-icon-btn-table:hover { background: var(--pos-bg); color: var(--pos-ink); }
+
+.pos-select { border-color: var(--pos-border); }
+.pos-select:focus { border-color: var(--pos-accent); box-shadow: none; }
+
+/* Product image thumbnail + upload dropzone */
+.pos-thumb {
+  width: 40px; height: 40px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--pos-border);
+  background: var(--pos-bg);
+}
+
+.pos-upload-box {
+  border: 1.5px dashed var(--pos-border);
+  border-radius: var(--radius-sm);
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  background: var(--pos-bg);
+  transition: border-color 0.15s ease;
+}
+.pos-upload-box:hover, .pos-upload-box.dragover { border-color: var(--pos-accent); }
+.pos-upload-preview {
+  width: 96px; height: 96px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--pos-border);
+  display: none;
+  margin: 0 auto 0.5rem;
+}
+
+@media (max-width: 991.98px) {
+  .pos-sidebar {
+    position: fixed;
+    top: 64px; bottom: 0; left: 0;
+    z-index: 1020;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+    box-shadow: 12px 0 30px -20px rgba(0,0,0,0.3);
+  }
+  .pos-sidebar.show { transform: translateX(0); }
+}
+
+/* -------------------------------------------------------------------
+   POS Screen (Phase 4) - product tiles + print-only receipt
+   ------------------------------------------------------------------- */
+.pos-product-tile {
+  border: 1px solid var(--pos-border);
+  border-radius: var(--radius-md);
+  background: var(--pos-surface);
+  padding: 0.75rem;
+  transition: border-color 0.15s ease, transform 0.1s ease;
+}
+.pos-product-tile:hover:not(:disabled) { border-color: var(--pos-accent); transform: translateY(-1px); }
+.pos-product-tile:disabled { opacity: 0.5; cursor: not-allowed; }
+.pos-product-name { font-weight: 500; font-size: 0.88rem; line-height: 1.3; margin-bottom: 0.25rem; }
+.pos-product-price { font-family: var(--font-mono); font-weight: 600; color: var(--pos-ink); }
+.pos-product-stock { font-size: 0.72rem; color: var(--pos-muted); margin-top: 0.15rem; }
+
+@media print {
+  body * { visibility: hidden; }
+  #receiptModal, #receiptModal * { visibility: visible; }
+  #receiptModal {
+    /* Keep the receipt out of the normal page flow without giving the
+       print document a viewport-height container.  A fixed, inset modal is
+       as tall as the screen and can spill onto a second printed page. */
+    position: absolute; top: 0; left: 0; z-index: 9999; display: block !important;
+    width: 100%; height: auto; min-height: 0;
+    background: #fff;
+  }
+  #receiptModal .modal-dialog {
+    margin: 0 auto; max-width: 340px;
+    min-height: 0; height: auto; transform: none !important;
+  }
+  #receiptModal .modal-content { border: 0; box-shadow: none; }
+  #receiptModal .modal-header, #receiptModal .modal-footer { display: none; }
+  /* Match the printed page to the selected printer width instead of a
+     generic A4 sheet, so thermal-printer output isn't mostly blank margin. */
+  #receiptModal .pos-receipt-w58 { max-width: 58mm; }
+  #receiptModal .pos-receipt-w80 { max-width: 80mm; }
+  body:has(.pos-receipt-w58) { @page { size: 58mm auto; margin: 2mm; } }
+  body:has(.pos-receipt-w80) { @page { size: 80mm auto; margin: 3mm; } }
+  body.printing-report * { visibility: visible; }
+  body.printing-report .pos-navbar, body.printing-report .pos-sidebar, body.printing-report .pos-footer,
+  body.printing-report #btnPrintReport, body.printing-report #reportPresets, body.printing-report .btn,
+  body.printing-report .modal { display: none !important; }
+  body.printing-report .pos-main { margin: 0 !important; padding: 0 !important; }
+  body.printing-report .card { box-shadow: none !important; break-inside: avoid; }
+  body.printing-report canvas { max-height: 170px !important; }
+  @page { size: A4 landscape; margin: 8mm; }
+}
+
+/* -------------------------------------------------------------------
+   Navbar low-stock notification bell
+   ------------------------------------------------------------------- */
+.pos-notif-panel { width: 320px; }
+.pos-notif-item:last-child { border-bottom: none !important; }
+.pos-notif-item:hover { background: var(--pos-bg); }
+@media (max-width: 575.98px) {
+  .pos-navbar { padding-left: .75rem !important; padding-right: .75rem !important; }
+  .pos-navbar .ms-auto { gap: .35rem !important; }
+  .pos-notif-panel { position: fixed !important; top: 58px !important; left: .5rem !important; right: .5rem !important; width: auto !important; max-height: calc(100dvh - 74px); transform: none !important; }
+  #notifList { max-height: calc(100dvh - 190px) !important; }
+}
+
+
+.cart-qty-input {
+    min-width: 90px !important;
+}
+
+td:has(.cart-qty-input) {
+    min-width: 180px;
+}
+
+/* =========================================================================
+   POS v2 - mobile-first sale screen
+   ========================================================================= */
+.pos-v2 { max-width: 680px; margin: 0 auto; min-height: calc(100vh - 130px); display: flex; flex-direction: column; gap: 18px; color: #172033; }
+.pos-v2-header { display: flex; justify-content: space-between; align-items: center; padding-top: 4px; }
+.pos-v2-eyebrow { display: block; color: #8a94a6; font-size: .66rem; font-weight: 700; letter-spacing: .12em; }
+.pos-v2 h1 { margin: 2px 0 0; font-size: 1.55rem; font-weight: 700; }
+.pos-v2-held-button, .pos-v2-clear { border: 1px solid #e2e7ef; background: #fff; border-radius: 12px; min-height: 42px; padding: 0 12px; color: #344054; font-weight: 600; display: inline-flex; align-items: center; gap: 7px; }
+.pos-v2-held-count { min-width: 20px; padding: 1px 6px; border-radius: 99px; background: #fff1d7; color: #9a5a00; font-size: .72rem; }
+.pos-v2-customer label, .pos-v2-payment-label { display: block; margin-bottom: 7px; color: #475467; font-size: .78rem; font-weight: 700; }
+.pos-v2-customer label span { color: #98a2b3; font-weight: 500; }
+.pos-v2-search-field, .pos-v2-item-search { display: flex; align-items: center; border: 1px solid #dde3ed; border-radius: 12px; background: #fff; min-height: 48px; padding: 0 11px; }
+.pos-v2-search-field > i, .pos-v2-item-search > i { color: #98a2b3; font-size: 1.08rem; }
+.pos-v2-search-field input, .pos-v2-item-search input, .pos-v2-amount-input input { border: 0; outline: 0; box-shadow: none; width: 100%; min-width: 0; background: transparent; padding: 10px; color: #172033; }
+.pos-v2-search-field button, .pos-v2-item-search button { border: 0; background: transparent; color: #667085; padding: 5px; }
+.pos-v2-selected-customer { color: #98a2b3; font-size: .75rem; margin: 5px 2px 0; }
+.pos-v2-items { flex: 1; min-height: 230px; display: flex; flex-direction: column; }
+.pos-v2-item-search { border-color: #b8c6ff; box-shadow: 0 0 0 3px rgba(72, 103, 255, .06); }
+.pos-v2-item-search > i { color: #4867ff; }
+.pos-v2-item-search button { border-left: 1px solid #e6eaf0; padding-left: 12px; }
+.pos-v2-cart-head { display: grid; grid-template-columns: 1fr 108px 76px; gap: 8px; padding: 18px 6px 7px; color: #98a2b3; font-size: .69rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.pos-v2-cart-head span:nth-child(2), .pos-v2-cart-head span:nth-child(3) { text-align: right; }
+.pos-v2-cart { flex: 1; min-height: 160px; max-height: 36vh; overflow: auto; border-top: 1px solid #edf0f4; border-bottom: 1px solid #edf0f4; }
+.pos-v2-cart-table { width: 100%; margin: 0; }
+.pos-v2-cart-table td { padding: 12px 5px; font-size: .85rem; }
+.pos-v2-cart-table td:first-child { width: auto; }
+.pos-v2-cart-table td:nth-child(2) { min-width: 108px !important; width: 108px; }
+.pos-v2-cart-table td:nth-child(3) { width: 76px; white-space: nowrap; }
+.pos-v2-cart-table td:last-child { width: 28px; padding-right: 0; }
+.pos-v2-cart-table .pos-qty-control { min-width: 102px; }
+.pos-v2-cart-table .pos-qty-control .btn { width: 28px; min-width: 28px; padding: 0; }
+.pos-v2-cart-table .pos-qty-control .cart-qty-input { min-width: 38px; padding-left: 2px; padding-right: 2px; }
+.pos-v2-empty { height: 180px; text-align: center; color: #98a2b3; }
+.pos-v2-empty i, .pos-v2-empty span, .pos-v2-empty small { display: block; }
+.pos-v2-empty i { font-size: 1.8rem; margin-bottom: 7px; color: #c4cad5; }
+.pos-v2-empty span { font-weight: 600; color: #667085; }.pos-v2-empty small { margin-top: 3px; }
+.pos-v2-summary { padding: 3px 4px 0; }
+.pos-v2-count-row { display: flex; justify-content: space-between; align-items: center; padding: 2px 0 10px; margin-bottom: 6px; border-bottom: 1px dashed var(--pos-border); font-size: .8rem; font-weight: 600; color: var(--pos-ink); }
+.pos-v2-count-row i { color: var(--pos-accent); margin-right: 4px; }
+.pos-v2-count-row strong { font-family: var(--font-mono); }
+.pos-v2-summary-row, .pos-v2-total-row, .pos-v2-change { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; font-size: .86rem; }
+.pos-v2-summary-row span { color: #667085; }.pos-v2-summary-row strong { font-weight: 600; }
+.pos-v2-discount-row > div { display: flex; align-items: center; gap: 8px; }
+.pos-v2-discount-row input { width: 82px; border: 1px solid #dfe4ec; border-radius: 7px; font-size: .75rem; padding: 4px 6px; }
+.pos-v2-total-row { margin-top: 7px; padding: 13px 0 0; border-top: 1px dashed #d9dfe8; font-size: 1.12rem; font-weight: 700; }.pos-v2-total-row strong { color: #263eb5; }
+.pos-v2-actions { position: sticky; bottom: 0; z-index: 5; display: grid; grid-template-columns: auto 1fr auto; gap: 9px; padding: 11px 0 calc(4px + env(safe-area-inset-bottom)); background: var(--pos-bg); }
+.pos-v2-hold, .pos-v2-complete { min-height: 48px; border-radius: 11px; font-weight: 700; border: 0; padding: 0 15px; }.pos-v2-hold { background: #eef1f6; color: #485467; }.pos-v2-complete { background: #3155e7; color: #fff; box-shadow: 0 6px 14px rgba(49,85,231,.2); }.pos-v2-complete:hover { background: #2448d9; color: #fff; }.pos-v2-clear { min-height: 48px; color: #d14343; }
+.pos-v2-payment-totals { border: 1px solid #e7ebf1; border-radius: 12px; padding: 11px 14px; margin-bottom: 20px; }.pos-v2-payment-totals > div { display: flex; justify-content: space-between; padding: 4px 0; color: #667085; font-size: .86rem; }.pos-v2-payment-totals strong { color: #172033; }.pos-v2-payment-totals .pos-v2-payment-due { margin-top: 6px; padding-top: 10px; border-top: 1px solid #e7ebf1; font-size: 1.1rem; font-weight: 700; }.pos-v2-payment-due strong { color: #3155e7; }
+.pos-v2-payment-methods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }.pos-v2-payment-methods label { border: 1px solid #dfe4ec; border-radius: 10px; padding: 11px 5px; text-align: center; font-size: .8rem; font-weight: 700; color: #667085; cursor: pointer; }.pos-v2-payment-methods label i { margin-right: 4px; }.pos-v2-payment-methods .btn-check:checked + label { background: #edf1ff; border-color: #3155e7; color: #2645c5; }
+.pos-v2-amount-input { display: flex; align-items: center; border: 1px solid #dfe4ec; border-radius: 10px; padding-left: 13px; }.pos-v2-amount-input span { color: #667085; font-weight: 700; }.pos-v2-amount-input input { font-size: 1.1rem; font-weight: 700; }.pos-v2-change { margin-top: 12px; padding: 11px 13px; border-radius: 9px; background: #eaf9f1; color: #23764d; }.pos-v2-change strong { color: #23764d; }
+@media (min-width: 768px) { .pos-v2 { padding: 8px 4px; } .pos-v2-cart { max-height: 42vh; } }
+@media (max-width: 575.98px) { .pos-main > .container-fluid { padding: 16px !important; } .pos-v2 { min-height: calc(100vh - 112px); gap: 15px; } .pos-v2 h1 { font-size: 1.35rem; } .pos-v2-held-button { min-height: 38px; } .pos-v2-cart { max-height: none; } .pos-v2-actions { margin: 0 -2px; } .pos-v2-item-search { position: sticky; top: 76px; z-index: 10; margin: 8px -2px 0; } .modal-fullscreen-sm-down .modal-footer { padding-bottom: calc(1rem + env(safe-area-inset-bottom)); } }
+
+/* v2 follows the register's existing navy and copper design tokens. */
+.pos-v2 { color: var(--pos-text); }
+.pos-v2-item-search { border-color: var(--pos-accent-2); box-shadow: 0 0 0 3px rgba(224,122,44,.10); }
+.pos-v2-item-search > i, .pos-v2-total-row strong, .pos-v2-payment-due strong { color: var(--pos-accent); }
+.pos-v2-complete { background: var(--pos-fill-dark); box-shadow: 0 6px 14px rgba(22,35,63,.20); }
+.pos-v2-complete:hover { background: var(--pos-ink-2); }
+.pos-v2-payment-methods .btn-check:checked + label { background: rgba(224,122,44,.10); border-color: var(--pos-accent); color: var(--pos-ink); }
+.pos-v2-modal-customer { margin-bottom: 18px; }
+.pos-v2-cart-item:focus { outline: 2px solid var(--pos-accent); outline-offset: -2px; background: rgba(242,166,90,.10); }
+.pos-v2-toast { position: fixed; z-index: 1090; right: 18px; bottom: 20px; display: flex; align-items: center; gap: 9px; max-width: calc(100vw - 36px); padding: 12px 15px; border-radius: 10px; background: var(--pos-fill-dark); color: #fff; box-shadow: 0 12px 28px rgba(13,23,48,.25); font-size: .86rem; font-weight: 600; opacity: 0; transform: translateY(16px); pointer-events: none; transition: opacity .2s ease, transform .2s ease; }
+.pos-v2-toast i { color: var(--pos-accent-2); }.pos-v2-toast.show { opacity: 1; transform: translateY(0); }
+.pos-v2-cash-keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; margin-top: 14px; }.pos-v2-cash-keypad button { min-height: 42px; border: 1px solid var(--pos-border); border-radius: var(--radius-sm); background: var(--pos-surface); color: var(--pos-ink); font-weight: 700; }.pos-v2-cash-keypad button:active { background: rgba(224,122,44,.14); border-color: var(--pos-accent); }.pos-v2-cash-keypad .pos-v2-keypad-clear { color: var(--pos-danger); font-size: .76rem; }.pos-v2-cash-keypad .pos-v2-keypad-dot { grid-column: 2; }
+
+/* Keep the phone register compact; on PC, show a proper two-column register. */
+@media (min-width: 768px) {
+  .pos-v2 { max-width: 1180px; display: grid; grid-template-columns: minmax(0, 1fr) 350px; grid-template-rows: auto minmax(440px, 1fr) auto; column-gap: 24px; row-gap: 18px; align-items: start; }
+  .pos-v2-header { grid-column: 1 / -1; padding: 4px 2px 0; }
+  .pos-v2-items { grid-column: 1; grid-row: 2 / 4; min-height: 0; background: var(--pos-surface); padding: 20px; border: 1px solid var(--pos-border); border-radius: var(--radius-md); box-shadow: 0 8px 22px rgba(22,35,63,.04); }
+  .pos-v2-cart { max-height: calc(100vh - 300px); }
+  .pos-v2-summary { grid-column: 2; grid-row: 2; align-self: start; position: sticky; top: 82px; background: var(--pos-surface); padding: 20px; border: 1px solid var(--pos-border); border-radius: var(--radius-md); }
+  .pos-v2-actions { grid-column: 2; grid-row: 3; position: sticky; bottom: 16px; margin: 0; padding: 0; background: transparent; }
+  .pos-v2-toast { right: 28px; bottom: 28px; }
+  .pos-v2-cash-keypad { display: none !important; }
+  .pos-v2-cash-keypad:not(.d-none) { display: grid !important; }
+}
+
+/* -------------------------------------------------------------------
+   Barcode / QR scanner modal
+   ------------------------------------------------------------------- */
+.pos-scanner-tabs .nav-link { color: var(--pos-muted); font-weight: 600; border-radius: 999px; padding: 6px 16px; }
+.pos-scanner-tabs .nav-link.active { background: var(--pos-fill-dark); color: #fff; }
+.pos-scanner-camera { position: relative; width: 100%; max-width: 420px; margin: 0 auto; min-height: 260px; border-radius: var(--radius-md); overflow: hidden; background: #0D1730; }
+.pos-scanner-camera video, .pos-scanner-camera img, .pos-scanner-camera canvas { width: 100% !important; border-radius: var(--radius-md); }
+.pos-scanner-result { border-color: var(--pos-border); }
+.pos-scanner-result:disabled { opacity: .55; }
+#scannerManualResults:empty { display: none; }
+
+/* -------------------------------------------------------------------
+   Dark mode
+   -------------------------------------------------------------------
+   Light is the default; toggling adds data-theme="dark" to <html>
+   (see includes/header.php + assets/js/app.js). Re-pointing the same
+   CSS variables the rest of the stylesheet already uses covers the
+   navbar, sidebar, cards, tables, inputs, and modals in one pass.
+   ------------------------------------------------------------------- */
+html[data-theme="dark"] {
+  --pos-bg: #10182C;
+  --pos-surface: #182238;
+  --pos-ink: #F4F1EA;
+  --pos-ink-2: #FFFFFF;
+  --pos-accent: #F2A65A;
+  --pos-accent-2: #E07A2C;
+  --pos-success: #4CC489;
+  --pos-danger: #EF6B6B;
+  --pos-warning: #E8BE6C;
+  --pos-text: #E7E9F0;
+  --pos-muted: #97A0B8;
+  --pos-border: #2B3654;
+}
+html[data-theme="dark"] body { background: var(--pos-bg); color: var(--pos-text); }
+html[data-theme="dark"] .pos-card,
+html[data-theme="dark"] .card,
+html[data-theme="dark"] .modal-content,
+html[data-theme="dark"] .dropdown-menu { background: var(--pos-surface); color: var(--pos-text); border-color: var(--pos-border); }
+html[data-theme="dark"] .form-control,
+html[data-theme="dark"] .form-select,
+html[data-theme="dark"] .pos-select { background: var(--pos-surface); color: var(--pos-text); border-color: var(--pos-border); }
+html[data-theme="dark"] .form-control::placeholder { color: var(--pos-muted); }
+html[data-theme="dark"] .form-control:focus,
+html[data-theme="dark"] .form-select:focus { background: var(--pos-surface); color: var(--pos-text); }
+html[data-theme="dark"] .table,
+html[data-theme="dark"] .pos-table { color: var(--pos-text); }
+html[data-theme="dark"] .pos-table th { color: var(--pos-muted); }
+html[data-theme="dark"] .pos-table tbody tr:hover { background: rgba(255,255,255,0.04); }
+html[data-theme="dark"] .text-muted { color: var(--pos-muted) !important; }
+html[data-theme="dark"] .pos-v2-items,
+html[data-theme="dark"] .pos-v2-summary { background: var(--pos-surface); border-color: var(--pos-border); }
+html[data-theme="dark"] .pos-v2-hold,
+html[data-theme="dark"] .pos-v2-held-button,
+html[data-theme="dark"] .pos-v2-clear { background: var(--pos-surface); border-color: var(--pos-border); color: var(--pos-text); }
+html[data-theme="dark"] .pos-receipt { background: #EDE9DF; color: #1F2430; } /* receipts stay light - they mirror printed paper */
+html[data-theme="dark"] .btn-outline-secondary { color: var(--pos-text); border-color: var(--pos-border); }
+html[data-theme="dark"] .btn-outline-secondary:hover { background: var(--pos-border); color: var(--pos-text); }
+html[data-theme="dark"] .pos-icon-btn:hover { background: var(--pos-border); }
+html[data-theme="dark"] .dropdown-item { color: var(--pos-text); }
+html[data-theme="dark"] .dropdown-item:hover,
+html[data-theme="dark"] .dropdown-item:focus { background: var(--pos-border); color: var(--pos-text); }
+html[data-theme="dark"] .dropdown-item.active,
+html[data-theme="dark"] .dropdown-item:active { background: var(--pos-fill-dark); color: #fff; }
+html[data-theme="dark"] .btn-close { filter: invert(1) grayscale(100%) brightness(200%); }
+html[data-theme="dark"] .list-group-item { background: var(--pos-surface); color: var(--pos-text); border-color: var(--pos-border); }
+html[data-theme="dark"] ::-webkit-scrollbar-thumb { background: var(--pos-border); }
+
+/* -------------------------------------------------------------------
+   "Payment Complete" confirmation (shown right after Complete Sale,
+   before the printable receipt)
+   ------------------------------------------------------------------- */
+.pos-payment-complete-check {
+  width: 72px; height: 72px; margin: 0 auto; border-radius: 50%;
+  background: rgba(47,158,100,0.12); color: var(--pos-success);
+  display: flex; align-items: center; justify-content: center; font-size: 2.1rem;
+}
+.pos-payment-complete-figures {
+  display: flex; justify-content: center; gap: 2.5rem; margin-top: .5rem;
+}
+.pos-payment-complete-figures div { text-align: center; }
+.pos-payment-complete-figures span { display: block; font-size: .74rem; color: var(--pos-muted); text-transform: uppercase; letter-spacing: .05em; }
+.pos-payment-complete-figures strong { display: block; font-size: 1.15rem; font-family: var(--font-mono); color: var(--pos-ink); }
+.pos-payment-complete-change strong { font-size: 1.7rem; color: var(--pos-success); font-weight: 800; }
+.pos-payment-complete-progress { height: 6px; border-radius: 999px; background: var(--pos-border); overflow: hidden; }
+.pos-payment-complete-progress-bar { height: 100%; width: 100%; background: var(--pos-success); transition: width 1s linear; }
+
+/* -------------------------------------------------------------------
+   Transaction Record & End of Day Reconciliation
+   ------------------------------------------------------------------- */
+.pos-recon-line { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; font-size: .86rem; border-bottom: 1px dashed var(--pos-border); }
+.pos-recon-line:last-of-type { border-bottom: none; }
+.pos-recon-line span:first-child { color: var(--pos-muted); }
+.pos-recon-line strong { font-family: var(--font-mono); }
+.pos-recon-expected { font-weight: 700; }
+.pos-recon-expected strong { color: var(--pos-ink); font-size: 1rem; }
+.pos-recon-variance strong { font-size: 1.05rem; }

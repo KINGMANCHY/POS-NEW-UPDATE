@@ -1,0 +1,15 @@
+{
+  "name": "POS STORE",
+  "short_name": "POS STORE",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f8fb",
+  "theme_color": "#14213d",
+  "icons": [{
+    "src": "assets/img/pwa-icon.svg",
+    "sizes": "any",
+    "type": "image/svg+xml",
+    "purpose": "any maskable"
+  }]
+}

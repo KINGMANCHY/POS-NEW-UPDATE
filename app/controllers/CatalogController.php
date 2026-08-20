@@ -1,0 +1,10 @@
+<?php
+if (!defined('POS_APP') && basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) require_once dirname(__DIR__, 2) . '/config/config.php';
+if (!defined('POS_APP')) die('Direct access not permitted.');
+class CatalogController
+{
+    private Catalog $model; private User $users;
+    public function __construct() { $this->model=new Catalog(); $this->users=new User(); }
+    public function dispatch(): void { SessionManager::requireLogin(); $action=$_REQUEST['action']??''; if(!in_array($action,['list','get','create','update','delete'],true)) Helper::jsonResponse(false,'Unknown action.',[],400); $type=$_REQUEST['type']??''; try { if($action==='list') { Helper::jsonResponse(true,'',['items'=>$this->model->all($type)]); } if($action==='get') { $item=$this->model->find($type,(int)($_GET['id']??0)); if(!$item) Helper::jsonResponse(false,'Item not found.',[],404); Helper::jsonResponse(true,'',['item'=>$item]); } Security::requireValidCsrfFromRequest(); $name=Security::sanitize(trim($_POST['name']??'')); $id=(int)($_POST['id']??0); $label=$this->model->label($type); if($action==='delete') { if(!$this->model->delete($type,$id)) Helper::jsonResponse(false,"{$label} not found.",[],404); Helper::jsonResponse(true,"{$label} deleted."); } if(mb_strlen($name)<1||mb_strlen($name)>100) Helper::jsonResponse(false,"{$label} name must be 1 to 100 characters.",[],422); if($this->model->nameExists($type,$name,$action==='update'?$id:null)) Helper::jsonResponse(false,"That {$label} already exists.",[],409); $active=!empty($_POST['is_active']); if($action==='create') $id=$this->model->create($type,$name,$active); else $this->model->update($type,$id,$name,$active); $this->users->logActivity((int)SessionManager::get('user_id'),strtoupper($type).'_'.strtoupper($action),"{$label}: {$name}"); Helper::jsonResponse(true,"{$label} saved.",['id'=>$id]); } catch (InvalidArgumentException $e) { Helper::jsonResponse(false,'Unknown catalog type.',[],400); } }
+}
+if (basename($_SERVER['SCRIPT_FILENAME']) === basename(__FILE__)) { SessionManager::start(); (new CatalogController())->dispatch(); }
